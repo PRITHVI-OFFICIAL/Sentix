@@ -21,7 +21,6 @@ const UserProfile = () => {
 
 const onSignOut = () => {
         signOut(auth).catch(error => console.log('Error logging out: ', error));
-        //navigation.popToTop()
   };
 
   const currentmail=getAuth()?.currentUser.email;
@@ -57,7 +56,6 @@ console.log(currentmail);
 
           <View style={{justifyContent:"center",marginLeft:35,marginBottom:10}}>
             <Text style={{fontSize:25,fontWeight:"bold",marginBottom:5}}>{currentmail.split('@')[0]}</Text>
-            <Text>+91 7550005350</Text>
             <Text>{getAuth().currentUser.email}</Text>
           </View>
         </View>
@@ -74,7 +72,7 @@ console.log(currentmail);
 
   container:{
     flex:1, 
-    marginTop:50,
+    marginTop:25,
     padding:20,
 
   },

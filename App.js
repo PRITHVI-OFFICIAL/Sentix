@@ -12,6 +12,8 @@ import colors from "./colors";
 import Login from './screens/Login';
 import Home from './screens/Home';
 import Signup from "./screens/Signup";
+import Forms from './screens/Forms';
+import Dashboard from './screens/Dashboard';
 // import AddBuses from "./screens/AddBuses";
 import UserProfile from "./screens/UserProfile";
 import Ticket from './screens/Ticket';
@@ -48,8 +50,17 @@ function HomeStack() {
     }>
       <Tab.Screen name="Home" component={Home}  options={{ tabBarIcon:({size,color})=>(
             <FontAwesome name="home" size={25} color={colors.primary} />
+          ),}} /> 
+      
+      <Tab.Screen name="Analytics" component={Forms}  options={{ tabBarIcon:({size,color})=>(
+            <FontAwesome name="dashboard" size={25} color={colors.primary} />
           ),}} />
       
+      <Tab.Screen name="Profile" component={UserProfile}  options={{ tabBarIcon:({size,color})=>(
+            <FontAwesome name="user" size={25} color={colors.primary} />
+          ),}} /> 
+      
+      <Tab.Screen name="Dashboard" component={Dashboard} options={{ tabBarVisible: true,tabBarButton: (props) => null}}  />     
       {/* <Tab.Screen name="Ticket" component={Ticket}  options={{ tabBarIcon:({size,color})=>(
             <FontAwesome name="ticket" size={25} color={colors.primary} />
           ),}} />
@@ -116,7 +127,7 @@ function RootNavigator() {
 
  return (
     <NavigationContainer>
-      <HomeStack/>
+      {user ? <HomeStack /> : <AuthStack />} 
     </NavigationContainer>
   );
 }

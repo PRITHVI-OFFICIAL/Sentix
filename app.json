@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1a73e8"
+      "backgroundColor": "#FFC933"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,15 +21,15 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
-      
+      },
+      "package": "com.prithvu.Sentix"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "2e734317-73c5-47e4-80fb-f6e84b684902"
+        "projectId": "356623d5-0264-4a95-9d62-97676acfd6db"
       }
     }
   }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View ,TouchableOpacity,Image,Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, View ,TouchableOpacity,Image,Alert ,StatusBar} from 'react-native';
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import colors from '../colors';
@@ -8,9 +8,7 @@ import { auth } from "../config/firebase";
 
 function Login(){
 
-    
     const navigation = useNavigation();
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -23,25 +21,18 @@ function Login(){
   };
     return(
         <View style={styles.container}>
+            <StatusBar backgroundColor={"black"}/>
             <View style={styles.container1}>
                 
-            {/* <Image
-               source={require('../assets/logo.png')}
-                style={{width: 300, height: 200,alignSelf:"center"}}
-            />  */}
-            <Text style={{fontSize:40,fontStyle:'italic',fontWeight:'bold',color:'white',alignSelf:'center'}}>Park Wise</Text>
+            <Image
+               source={require('../assets/img.jpg')}
+                style={{width:"100%", height: 300,alignSelf:"center",bottom:15}}
+            /> 
             </View>
 
-            {/* <View style={styles.container2}>
-                <View style={{flexDirection:"row",justifyContent:"space-around"}}>
-                <Text style={styles.heading1}>Register</Text>
-                <Text style={styles.heading1}>Login</Text>
-                </View>
-            </View> */}
-
             <View style={styles.container3}>
-            <View style={{marginTop:10}}>
-            <Text style={{fontWeight:"bold",fontSize:30,textAlign:"center",color:"white"}}>Login Page</Text>
+            <View style={{marginTop:30}}>
+            <Text style={{fontWeight:"bold",fontSize:30,textAlign:"center",color:'white',fontStyle:"italic"}}>Login Page</Text>
             
         <TextInput
             style={styles.input}
@@ -80,7 +71,7 @@ function Login(){
             <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
                 <   Text style={{color: 'white', fontWeight: '400', fontSize: 14}}>Don't have an account? </Text>
             <TouchableOpacity onPress={()=> navigation.navigate('Signup')}>
-            <Text style={{color: 'red', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
+            <Text style={{color: '#232B5D', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
             </TouchableOpacity>
             </View>
             </View>
@@ -94,7 +85,7 @@ export default Login;
 const styles = StyleSheet.create({
     container: {
        flex:1, 
-      backgroundColor:colors.primary,
+      backgroundColor:"#ffc62f"
 
     },
     container2:{
@@ -102,12 +93,12 @@ const styles = StyleSheet.create({
         //backgroundColor:"blue",
     },
     container1: {
-        marginTop:100,
+       // marginTop:100,
         height:100,
         //backgroundColor:"yellow"
      },
      container3: {
-        marginTop:40,
+        marginTop:150,
         height:500,
         width:"90%",
         alignSelf:"center",
@@ -134,9 +125,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 10,
         padding: 12,
+        borderColor:colors.primary, 
+
+        
       },
       button: {
-        backgroundColor: 'red',
+        backgroundColor: '#232B5D',
         height: 58,
         borderRadius: 10,
         justifyContent: 'center',

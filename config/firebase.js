@@ -13,12 +13,12 @@ import Constants from 'expo-constants';
 //   };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBNU9ZZyEkQ4GE0qQJV6KvqVUMFiwfKVV8",
-  authDomain: "parkwise-d041c.firebaseapp.com",
-  projectId: "parkwise-d041c",
-  storageBucket: "parkwise-d041c.appspot.com",
-  messagingSenderId: "767858998117",
-  appId: "1:767858998117:web:0de48c6208da6d83ed3f8c"
+  apiKey: "AIzaSyBwZbwL1BxrmJ5zh2TOBl2kr7zrpU6K4jU",
+  authDomain: "sentix-project.firebaseapp.com",
+  projectId: "sentix-project",
+  storageBucket: "sentix-project.appspot.com",
+  messagingSenderId: "202162459545",
+  appId: "1:202162459545:web:fc346469dca67debd6f908"
 };
 
 // initialize firebase
