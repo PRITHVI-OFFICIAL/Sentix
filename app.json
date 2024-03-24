@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Sentix",
-    "slug": "Sentix",
+    "name": "EmoTrack",
+    "slug": "EmoTrack",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,7 +29,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "356623d5-0264-4a95-9d62-97676acfd6db"
+        "projectId": "7952beac-f124-4c09-b3a8-75837bef6b59"
       }
     }
   }
