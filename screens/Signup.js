@@ -42,6 +42,7 @@ function Signup(){
             setDoc(doc(database, "Users", email.split("@")[0]), {
                 name: name,
                 email:email, 
+                company:'google'
         
             
             

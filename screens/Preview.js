@@ -16,7 +16,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL ,uploadString,uploadBytes} from "firebase/storage";
 import {collection,addDoc,orderBy,query,onSnapshot,updateDoc,doc,getDoc,setDoc} from 'firebase/firestore';
 import { getAuth} from "firebase/auth";
-const Dashboard = ({ route }) => {
+const Preview = ({ route }) => {
 
   const { data } = route.params;
   const { company } = route.params;
@@ -60,20 +60,6 @@ const Dashboard = ({ route }) => {
   let year = date.getFullYear();
   let currentDate = date.getTime().toString();
 
-
-setDoc(doc(collectionRef,currentDate), {
-    name:company,
-    count:data.length,
-    positive:positive, 
-    neutral:neutral, 
-    negative:negative    
-}
-);
-
-
-updateDoc(collectionRef1, {
- company:company
-});
 
 
 const img = {
@@ -249,4 +235,4 @@ const img = {
   );
 }
 
-export default Dashboard;
+export default Preview;
