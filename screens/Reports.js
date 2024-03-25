@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, ScrollView ,ActivityIndicator,TouchableHighlight,Image} from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, ScrollView ,ActivityIndicator,TouchableHighlight,Image,Modal} from 'react-native';
 import React, { useState,useEffect,useLayoutEffect} from "react";
 import { useNavigation} from "@react-navigation/native";
 import { auth,database} from '../config/firebase';
@@ -18,7 +18,9 @@ import colors from '../colors';
 function Reports() {
   const navigation = useNavigation();
   const [data,setdata]=useState([]);
-  const[res,setres]=useState([])
+  const[res,setres]=useState([]); 
+  const [loading,setLoading]=useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
 
   const currentmail=getAuth()?.currentUser.email;
@@ -49,7 +51,8 @@ function Reports() {
     console.log(data);
   const sendApiCall = async (company, mode, count, language) => {
     try {
-    
+      setLoading(true);
+      setModalVisible(true);
 
         // URL of the API endpoint
         const response = await axios.post(
@@ -100,9 +103,11 @@ function Reports() {
       await FileSystem.writeAsStringAsync(fileUri, wbout, { encoding: FileSystem.EncodingType.Base64 });
 
       
-
+      setLoading(false);
+      setModalVisible(false);
       await Sharing.shareAsync(fileUri, { mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', dialogTitle: 'Download File' });
 
+      
            
             
         } else {
@@ -210,7 +215,8 @@ function handleCardPress(name1,count) {
     </View>  
 
 
-    <View  style={{padding:15}}>
+          <ScrollView>
+          <View  style={{padding:15}}>
         {data.map((item,index) => (
         //   <TouchableOpacity
         //     key={item.id}
@@ -248,7 +254,25 @@ function handleCardPress(name1,count) {
         </View>
       </TouchableOpacity>
         ))}
+
+        <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    // Close modal if user tries to close it
+                    setModalVisible(false);
+                }}
+            >
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ backgroundColor: '#fff', padding: 20, borderRadius: 10 }}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                        <Text>Loading...</Text>
+                    </View>
+                </View>
+            </Modal>
       </View>
+          </ScrollView>
 
 
     </View>

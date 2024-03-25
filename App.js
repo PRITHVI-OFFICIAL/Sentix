@@ -18,6 +18,7 @@ import Dashboard from './screens/Dashboard';
 import UserProfile from "./screens/UserProfile";
 import Ticket from './screens/Ticket';
 import Reports from './screens/Reports';
+import Preview from './screens/Preview';
 
 
 
@@ -62,7 +63,9 @@ function HomeStack() {
       
       <Tab.Screen name="Dashboard" component={Dashboard} options={{ tabBarVisible: true,tabBarButton: (props) => null}}  />
 
-        <Tab.Screen name="Reports" component={Reports} options={{ tabBarVisible: true,tabBarButton: (props) => null}}  />     
+        <Tab.Screen name="Reports" component={Reports} options={{ tabBarVisible: true,tabBarButton: (props) => null}}  />    
+
+         <Tab.Screen name="Preview" component={Preview} options={{ tabBarVisible: true,tabBarButton: (props) => null}}  />   
       {/* <Tab.Screen name="Ticket" component={Ticket}  options={{ tabBarIcon:({size,color})=>(
             <FontAwesome name="ticket" size={25} color={colors.primary} />
           ),}} />

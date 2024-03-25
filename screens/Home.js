@@ -1,5 +1,5 @@
 import React,{useEffect,useRef,useState}from 'react';
-import { Modal, View, Image, Button,Text,StyleSheet, TouchableOpacity , Dimensions, Animated, Easing,Linking, Alert,StatusBar} from 'react-native';
+import { Modal, View, Image, Button,Text,StyleSheet, TouchableOpacity , Dimensions, Animated, Easing,Linking, Alert,StatusBar,ActivityIndicator} from 'react-native';
 import Colors from '../colors';
 import { ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -9,6 +9,7 @@ import { auth, database } from '../config/firebase'
 import {collection,addDoc,orderBy,query,onSnapshot,getDocs,docRef,getDoc,doc, QuerySnapshot,where} from 'firebase/firestore';
 import colors from '../colors';
 import { getAuth,signOut} from "firebase/auth";
+import axios from 'axios';
 
 
 
@@ -19,7 +20,10 @@ const Home = () => {
   const navigation = useNavigation();
   const animationRef = useRef(null);
   const [name,SetName]=useState("");
-
+  const [company,Setcompany]=useState("");
+  const [data,setdata]=useState("");
+  const [loading,setLoading]=useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const currentmail=getAuth()?.currentUser.email;
   useEffect(() => {
 
@@ -36,7 +40,89 @@ const Home = () => {
     });
   return unsubscribe;
   }, []);
+
+
+  useEffect(() => {
+
+    const collectionRef = collection(database, 'Users');
+    const q = query(collectionRef, where("email", "==", currentmail));
+  
+  const unsubscribe = onSnapshot(q, querySnapshot => {
+    console.log('querySnapshot unsusbscribe');
+      
+        const data= querySnapshot.docs.map(doc => ({
+          company: doc.data().company
+        }))
+        Setcompany(data[0]?.company);
+    });
+  return unsubscribe;
+  }, []);
   console.log(name);
+
+const sendApiCall = async (company) => {
+  try {
+    setLoading(true);
+    setModalVisible(true);
+
+      // URL of the API endpoint
+      const response = await axios.post(
+        'https://sentixbackend.onrender.com/get_news/',
+        // '{\n  "text": "zomato",\n  "mode": "term",\n  "number": 10,\n  "language": "en"\n}',
+        {
+          'text': company,
+          'mode': 'term',
+          'number': 20,
+          'language': 'en'
+        },
+        {
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+
+      if (response.status === 200) {
+          // Return the data
+          console.log(response.data);
+          //setres(response.data);
+          setdata(response.data);
+          setLoading(false);
+          setModalVisible(false);
+          navigation.navigate('Preview',{data:response.data,company:company});  
+    
+      } 
+      
+      else {
+          // If the request was not successful, throw an error
+          console.log("Failed to fetch data");
+          Alert.alert('Sorry', 'Unable to Process your Request. Try Again Later', [
+            {
+              text: 'Ok',
+            },
+          ]);
+          setLoading(false);
+          setModalVisible(false);
+          
+      }
+  } catch (error) {
+      // Handle any errors
+      console.error("Error:", error.message);
+      Alert.alert(error.message, 'Unable to Process your Request. Try Again Later', [
+        {
+          text: 'Ok',
+        },
+      ]);
+
+      setLoading(false);
+          setModalVisible(false);
+  
+      return ;
+  }
+};
+
+
 
   function bloglink(link){
 
@@ -58,7 +144,6 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={colors.primary}/>
-       
       <View
       style={{
         height: 60,
@@ -91,14 +176,11 @@ const Home = () => {
       </View>
 
       <View>
-        {/* <Image
-          source={require('../assets/teethHome.png')}
-          style={{ width: 80, height: 80 }}
-        /> */}
+
       </View>
     </View>
 
-        {/* <Text style={styles.heading}>Products</Text> */}
+      
        
         
         <View>
@@ -107,9 +189,6 @@ const Home = () => {
         style={{
           height: 50,
           backgroundColor: colors.primary,
-          //borderRadius: 10,
-         // width: width - 30, // Adjust the width according to the screen size
-          //margin: 15,
           marginBottom:50,
           borderBottomStartRadius:10,
           borderBottomEndRadius:10
@@ -125,29 +204,16 @@ const Home = () => {
 
      </View>
 
-     {/* <Text style={{fontSize:15,textAlign:'center',color:'white'}}>   Sensing  Sentiments  Swiftly..... </Text> */}
-     
-
-       
       </View>
 
-   
-        </View>
+      </View>
+
+      <View style={{margin:5,flex:1,padding:10,bottom:10}}>
 
 
+      <Text style={{fontSize:20,fontWeight:"500",marginLeft:5,marginBottom:10}}>Features</Text>
 
-       <View style={{margin:5,flex:1,padding:10,bottom:10}}>
-
-     
-
-
-
-       <Text style={{fontSize:20,fontWeight:"500",marginLeft:5,marginBottom:10}}>Features</Text>
-
-       <View style={{height:130,backgroundColor:Colors.primary,borderRadius:10,flexDirection:"row",padding:10,elevation:30,shadowColor:Colors.primary,justifyContent:"space-around"}}>
-
-
-        
+      <View style={{height:130,backgroundColor:Colors.primary,borderRadius:10,flexDirection:"row",padding:10,elevation:30,shadowColor:Colors.primary,justifyContent:"space-around"}}>
 
     <TouchableOpacity onPress={()=>navigation.navigate('Analytics')}>
     <View style={{height:"100%",backgroundColor:Colors.primary,width:90,justifyContent:"center",alignItems:"center",}}>
@@ -159,13 +225,13 @@ const Home = () => {
      source={require('../assets/analytics.png')}
      style={{ width: 40, height: 40 ,marginLeft:5}}
      /> 
- </View>
+  </View>
 
-<Text style={{marginTop:10,fontSize:12,color:"white"}}>Analytics</Text>
-</View>
+  <Text style={{marginTop:10,fontSize:12,color:"white"}}>Analytics</Text>
+  </View>
     </TouchableOpacity>
 
-    <TouchableOpacity onPress={()=>navigation.navigate('Analytics')} >
+    <TouchableOpacity onPress={()=>sendApiCall(company)}>
 
     <View style={{height:"100%",backgroundColor:Colors.primary,width:90,justifyContent:"center",alignItems:"center",}}>
 
@@ -281,7 +347,8 @@ const Home = () => {
         
         </View>
 
-        <TouchableOpacity onPress={()=> bloglink('https://appinventiv.com/blog/ai-sentiment-analysis-in-business/')}>
+        <View style={{flexDirection:'row',justifyContent:'space-around'}}>
+          <TouchableOpacity onPress={()=> bloglink('https://appinventiv.com/blog/ai-sentiment-analysis-in-business/')}>
         <View>
         <View style={{width:140,height:100,backgroundColor:Colors.primary,margin:5,borderRadius:10,marginRight:15,marginTop:15}}>
           <Image
@@ -292,11 +359,10 @@ const Home = () => {
         </View>
         <Text style={{marginTop:5,fontWeight:"500",marginLeft:10,fontSize:12}}>Impact of Sentiment Analysis</Text>
         </View>
-        </TouchableOpacity>
+        </TouchableOpacity> 
 
-     
 
-        {/* <TouchableOpacity onPress={()=> bloglink('https://www.precedenceresearch.com/artificial-intelligence-in-healthcare-market')}>
+        <TouchableOpacity onPress={()=> bloglink('https://www.precedenceresearch.com/artificial-intelligence-in-healthcare-market')}>
         <View>
         <View style={{width:140,height:100,backgroundColor:Colors.primary,margin:5,borderRadius:10,marginRight:15,marginTop:15}}>
           <Image
@@ -307,9 +373,10 @@ const Home = () => {
         </View>
         <Text style={{marginTop:5,fontWeight:"500",marginLeft:10,fontSize:12}}>Market of AI</Text>
         </View>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
+        </View>
 
-
+        
        </View>
         </ScrollView>
 
@@ -323,6 +390,23 @@ const Home = () => {
 
 
 </View> */}
+
+<Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    // Close modal if user tries to close it
+                    setModalVisible(false);
+                }}
+            >
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ backgroundColor: '#fff', padding: 20, borderRadius: 10 }}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                        <Text>Loading...</Text>
+                    </View>
+                </View>
+            </Modal>
 
       
         
